@@ -156,7 +156,7 @@ class Customer(models.Model):
     address = models.CharField(max_length=255, verbose_name='Адрес')
 
     def __str__(self):
-        return "Покупатель: {} {}".format(self.user.first_name, self.last_name)
+        return "Покупатель: {}".format(self.user)
 
 
 class Notebook(Product):

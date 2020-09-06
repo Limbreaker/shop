@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import View, DetailView
-
+from django.shortcuts import get_object_or_404
 from .mixins import CategoryDetailMixin
-from .models import Notebook, Smartphone, Category, LatestProducts
+from .models import Notebook, Smartphone, Category, LatestProducts, Customer, Cart
 
 
 class BaseView(View):
@@ -44,3 +44,16 @@ class CategoryDetailView(CategoryDetailMixin, DetailView):
     context_object_name = 'category'
     template_name = 'category_detail.html'
     slug_url_kwarg = 'slug'
+
+
+class CartView(View):
+
+    def get(self, request, *args, **kwargs):
+        customer = get_object_or_404(Customer, user=request.user)
+        cart = get_object_or_404(Cart, owner=customer)
+        categories = Category.objects.get_categories_for_left_sidebar()
+        context = {
+            'cart': cart,
+            'categories': categories
+        }
+        return render(request, 'cart.html', context)
